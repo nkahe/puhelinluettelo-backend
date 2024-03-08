@@ -62,7 +62,47 @@ app.delete('/api/persons/:id', (req, res) => {
   } else {
     res.status(404).end();
   }
-  
+});
+
+const generateID = () => {
+  const id = Math.floor(Math.random() * 1000);
+  return id;
+}
+
+app.post('/api/persons', (req, res) => {
+  const body = req.body;
+
+  console.log('body', body);
+
+  if (body.hasOwnProperty('name') === false) {
+    return res.status(400).json({
+      error: 'person name missing'
+    });
+  }
+
+  if (body.hasOwnProperty('number') === false) {
+    return res.status(400).json({
+      error: 'person number missing'
+    });
+  }
+
+  const existAlready = persons.some(person => person.name === body.name);
+
+  if (existAlready === true) {
+    return res.status(400).json({
+      error: 'name must be unique'
+    });
+  }
+
+  const newPerson = {
+    name: body.name,
+    number: body.number,
+    id: generateID
+  }
+
+  persons = persons.concat(newPerson);
+  res.json(newPerson);
+  "number": "123234234"
 });
 
 const PORT = 3004;
