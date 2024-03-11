@@ -3,9 +3,16 @@ const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
 
+// mahdollisuus käyttää eri originia.
 app.use(cors());
+
 app.use(express.json());
+
+// loggaaminen.
 app.use(morgan('tiny'));
+
+// middleware staattisen sisällön näyttämiseen.
+app.use(express.static('dist'));
 
 
 
