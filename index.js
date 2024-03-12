@@ -14,8 +14,6 @@ app.use(morgan('tiny'));
 // middleware staattisen sisällön näyttämiseen.
 app.use(express.static('dist'));
 
-
-
 let persons = [
   {
     "name": "Arto Hellas",
@@ -66,25 +64,19 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id);
-  const person = persons.find(person => person.id === id);
-
-  if (person) {
+  const personToDelete = persons.find(person => person.id === id);
+  console.log('Poistettava: id: ', id, 'person: ', personToDelete);
+  if (personToDelete) {
     persons = persons.filter(person => person.id !== id);
-    res.status(204).end();
+    res.status(200).json(personToDelete);
   } else {
+    console.log('Ei löytynyt poistettavaa.');
     res.status(404).end();
   }
 });
 
-const generateID = () => {
-  const id = Math.floor(Math.random() * 1000);
-  return id;
-}
-
 app.post('/api/persons', (req, res) => {
   const body = req.body;
-
-  console.log('body', body);
 
   if (body.hasOwnProperty('name') === false) {
     return res.status(400).json({
@@ -106,13 +98,16 @@ app.post('/api/persons', (req, res) => {
     });
   }
 
+  const ID = Math.floor(Math.random() * 1000);
+
   const newPerson = {
     name: body.name,
     number: body.number,
-    id: generateID
+    id: ID
   }
 
   persons = persons.concat(newPerson);
+  console.log('lisätään: ', newPerson);
   res.json(newPerson);
 });
 
