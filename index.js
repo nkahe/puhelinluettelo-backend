@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
@@ -14,6 +15,13 @@ app.use(morgan('tiny'));
 // middleware staattisen sisällön näyttämiseen.
 app.use(express.static('dist'));
 
+const url =
+  `mongodb+srv://heka:${password}@cluster.rvzhvul.mongodb.net/puhelinluettelo?retryWrites=true&w=majority&appName=Cluster`
+
+mongoose.set('strictQuery', false);
+mongoose.connect(url);
+
+/*
 let persons = [
   {
     "name": "Arto Hellas",
@@ -36,6 +44,7 @@ let persons = [
     "id": 4
   }
 ];
+*/
 
 app.get('/api/persons', (req, res) => {
   res.json(persons);
