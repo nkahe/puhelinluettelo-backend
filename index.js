@@ -22,6 +22,8 @@ app.use(express.static('dist'));
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(persons => {
     res.json(persons);
+    console.log(persons);
+
   })
 });
 
@@ -35,7 +37,14 @@ app.get('/info', (req, res) => {
 });
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
+
+  Person.findById(id).then( person => {
+    res.json(person);
+  }).catch(() => {
+    res.status(404).end();
+  });
+
+  /*
   const person = persons.find(person => person.id === id);
 
   if (person) {
@@ -43,6 +52,7 @@ app.get('/api/persons/:id', (req, res) => {
   } else {
     res.status(404).end();
   }
+  */
 
 });
 
