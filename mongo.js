@@ -1,3 +1,5 @@
+// Komentorivityökalu tietokannan käsittelyyn.
+
 const mongoose = require('mongoose');
 
 console.log('Argumenttien määrä: ', process.argv.length);
