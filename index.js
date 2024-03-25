@@ -12,7 +12,9 @@ app.use(express.json());
 // loggaaminen.
 app.use(morgan('tiny'));
 
-// middleware staattisen sisällön näyttämiseen.
+/* tarkastaa Express GET-tyyppisten HTTP-pyyntöjen yhteydessä ensin löytyykö
+  pyynnön polkua vastaavan nimistä tiedostoa hakemistosta dist. Jos löytyy, 
+  palauttaa Express tiedoston. */
 app.use(express.static('dist'));
 
 const url =
