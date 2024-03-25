@@ -1,8 +1,10 @@
+// Ympäristömuuttujat .env:stä.
+require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
+const Person = require('./models/person');
 
 // mahdollisuus käyttää eri originia.
 app.use(cors());
@@ -17,38 +19,10 @@ app.use(morgan('tiny'));
   palauttaa Express tiedoston. */
 app.use(express.static('dist'));
 
-const url = process.env.MONGODB_URI;
-
-mongoose.set('strictQuery', false);
-mongoose.connect(url);
-
-/*
-let persons = [
-  {
-    "name": "Arto Hellas",
-    "number": "040-123456",
-    "id": 1
-  },
-  {
-    "name": "Ada Lovelace",
-    "number": "39-44-532232",
-    "id": 2
-  },
-  {
-    "name": "Dan Abramov",
-    "number": "12-43-234345",
-    "id": 3
-  },
-  {
-    "name": "Mary Poppendieck",
-    "number": "39-23-6423122",
-    "id": 4
-  }
-];
-*/
-
 app.get('/api/persons', (req, res) => {
-  res.json(persons);
+  Person.find({}).then(persons => {
+    res.json(persons);
+  })
 });
 
 
