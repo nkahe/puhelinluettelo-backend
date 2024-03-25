@@ -17,8 +17,7 @@ app.use(morgan('tiny'));
   palauttaa Express tiedoston. */
 app.use(express.static('dist'));
 
-const url =
-  `mongodb+srv://heka:${password}@cluster.rvzhvul.mongodb.net/puhelinluettelo?retryWrites=true&w=majority&appName=Cluster`
+const url = process.env.MONGODB_URI;
 
 mongoose.set('strictQuery', false);
 mongoose.connect(url);
