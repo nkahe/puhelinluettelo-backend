@@ -62,6 +62,10 @@ app.delete('/api/persons/:id', (req, res) => {
 app.post('/api/persons', (req, res) => {
   const body = req.body;
 
+  console.log('body: ', body);
+
+  console.log('name: ', body.name);
+
   if (body.hasOwnProperty('name') === false) {
     return res.status(400).json({
       error: 'person name missing'
@@ -74,6 +78,7 @@ app.post('/api/persons', (req, res) => {
     });
   }
 
+  /*
   const existAlready = persons.some(person => person.name === body.name);
 
   if (existAlready === true) {
@@ -81,18 +86,21 @@ app.post('/api/persons', (req, res) => {
       error: 'name must be unique'
     });
   }
+  */
 
-  const ID = Math.floor(Math.random() * 1000);
+  // const ID = Math.floor(Math.random() * 1000);
 
-  const newPerson = {
+  const newPerson = new Person({
     name: body.name,
-    number: body.number,
-    id: ID
-  }
+    number: body.number
+  });
 
-  persons = persons.concat(newPerson);
   console.log('lisätään: ', newPerson);
-  res.json(newPerson);
+
+  newPerson.save().then(savedPerson => {
+    res.json(savedPerson);
+  });
+
 });
 
 const unknownEndpoint = (req, res) => {
