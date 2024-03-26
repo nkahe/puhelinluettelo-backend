@@ -78,28 +78,26 @@ app.post('/api/persons', (req, res) => {
     });
   }
 
-  /*
-  const existAlready = persons.some(person => person.name === body.name);
-
-  if (existAlready === true) {
-    return res.status(400).json({
-      error: 'name must be unique'
-    });
-  }
-  */
-
-  // const ID = Math.floor(Math.random() * 1000);
-
   const newPerson = new Person({
     name: body.name,
     number: body.number
   });
 
-  console.log('lisätään: ', newPerson);
-
-  newPerson.save().then(savedPerson => {
-    res.json(savedPerson);
-  });
+  Person.findOne({ name: newPerson.name })
+    .then(person => {
+      console.log('person: ', person);
+      if (person) {
+        return res.status(400).json({
+          error: 'name must be unique'
+        });
+      } else {
+        newPerson.save().then(savedPerson => {
+          res.json(savedPerson);
+        });
+      }
+    }).catch(err => {
+      console.error('Error: ', err);
+    })
 
 });
 
