@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// dotenv:n avulla voidaan asettaa .env:ssä.
 const url = process.env.MONGODB_URI;
 
 console.log('connecting to', url);
@@ -21,7 +22,7 @@ const personSchema = new mongoose.Schema({
   number: String
 });
 
-// .id laitetaan id ja turha __V pois.
+// MongoDB:n _id -> id ja turha __V pois.
 personSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
