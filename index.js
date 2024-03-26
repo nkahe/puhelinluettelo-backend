@@ -37,27 +37,17 @@ app.get('/info', (req, res) => {
 });
 
 app.get('/api/persons/:id', (req, res) => {
-
+  const id = req.params.id;
   Person.findById(id).then( person => {
     res.json(person);
   }).catch(() => {
     res.status(404).end();
   });
 
-  /*
-  const person = persons.find(person => person.id === id);
-
-  if (person) {
-    res.json(person);
-  } else {
-    res.status(404).end();
-  }
-  */
-
 });
 
 app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
+  const id = req.params.id;
   const personToDelete = persons.find(person => person.id === id);
   console.log('Poistettava: id: ', id, 'person: ', personToDelete);
   if (personToDelete) {
