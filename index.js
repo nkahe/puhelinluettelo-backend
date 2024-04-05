@@ -48,7 +48,15 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete('/api/persons/:id', (req, res) => {
   const id = req.params.id;
-  const personToDelete = persons.find(person => person.id === id);
+  //const personToDelete = persons.find(person => person.id === id);
+
+  Person.findByIdAndDelete(id)
+    .then(result => {
+      res.status(204).end();
+    })
+    .catch(error => next(error));
+
+    /*
   console.log('Poistettava: id: ', id, 'person: ', personToDelete);
   if (personToDelete) {
     persons = persons.filter(person => person.id !== id);
@@ -57,13 +65,13 @@ app.delete('/api/persons/:id', (req, res) => {
     console.log('Ei löytynyt poistettavaa.');
     res.status(404).end();
   }
+  */
 });
 
 app.post('/api/persons', (req, res) => {
   const body = req.body;
 
   console.log('body: ', body);
-
   console.log('name: ', body.name);
 
   if (body.hasOwnProperty('name') === false) {
@@ -100,6 +108,22 @@ app.post('/api/persons', (req, res) => {
     })
 
 });
+
+const errorHandler = (error, req, res, next) => {
+  if (error.message) {
+    console.error(error.message);
+  }
+  if (res.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id'});
+  }
+
+  // virheenkäsittely Expressin oletusarvoisen virheidenkäsittelijän hoidettavaksi.
+  next(error);
+}
+
+/*  virheidenkäsittelijämiddleware tulee rekisteröidä muiden middlewarejen sekä
+routejen rekisteröinnin jälkeen. */
+app.use(errorHandler);
 
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: 'unknown endpoint' });
