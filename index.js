@@ -39,7 +39,11 @@ app.get('/info', (req, res) => {
 app.get('/api/persons/:id', (req, res) => {
   const id = req.params.id;
   Person.findById(id).then( person => {
-    res.json(person);
+    if (person) {
+      res.json(person);
+    } else {
+      res.status(404).end();
+    }
   }).catch(() => {
     res.status(404).end();
   });
@@ -71,7 +75,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
   */
 });
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body;
 
   console.log('body: ', body);
@@ -106,10 +110,7 @@ app.post('/api/persons', (req, res) => {
           res.json(savedPerson);
         });
       }
-    }).catch(err => {
-      console.error('Error: ', err);
-    })
-
+    }).catch(error => next(error))
 });
 
 const errorHandler = (error, req, res, next) => {
@@ -131,6 +132,8 @@ app.use(errorHandler);
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: 'unknown endpoint' });
 }
+
+// Pitää olla routeista ja middlewareista viimeisimpänä.
 
 app.use(unknownEndpoint);
 
