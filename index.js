@@ -46,13 +46,16 @@ app.get('/api/persons/:id', (req, res) => {
 
 });
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   const id = req.params.id;
   //const personToDelete = persons.find(person => person.id === id);
 
   Person.findByIdAndDelete(id)
     .then(result => {
-      res.status(204).end();
+
+      console.log('app.delete: vastaus: ', result);
+
+      res.json(result);
     })
     .catch(error => next(error));
 
