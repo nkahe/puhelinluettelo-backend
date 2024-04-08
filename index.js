@@ -75,6 +75,35 @@ app.delete('/api/persons/:id', (req, res, next) => {
   */
 });
 
+app.put('/api/persons/:id', (req, res, next) => {
+
+  const body = req.body;
+
+  if (body.hasOwnProperty('name') === false) {
+    return res.status(400).json({
+      error: 'person name missing'
+    });
+  }
+
+  if (body.hasOwnProperty('number') === false) {
+    return res.status(400).json({
+      error: 'person number missing'
+    });
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+
+  // new: true aiheuttaa, että palauttaa uuden tiedon eikä vanhaa.
+  Person.findByIdAndUpdate(req.params.id, person, { new: true })
+    .then(updatedPerson => {
+      res.json(updatedPerson)
+    })
+    .catch(error => next(error))
+});
+
 app.post('/api/persons', (req, res, next) => {
   const body = req.body;
 
