@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(morgan('tiny'));
 
 /* tarkastaa Express GET-tyyppisten HTTP-pyyntöjen yhteydessä ensin löytyykö
-  pyynnön polkua vastaavan nimistä tiedostoa hakemistosta dist. Jos löytyy, 
+  pyynnön polkua vastaavan nimistä tiedostoa hakemistosta dist. Jos löytyy,
   palauttaa Express tiedoston. */
 app.use(express.static('dist'));
 
@@ -63,7 +63,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
     })
     .catch(error => next(error));
 
-    /*
+  /*
   console.log('Poistettava: id: ', id, 'person: ', personToDelete);
   if (personToDelete) {
     persons = persons.filter(person => person.id !== id);
@@ -139,7 +139,7 @@ app.post('/api/persons', (req, res, next) => {
         newPerson.save().then(savedPerson => {
           res.json(savedPerson);
         })
-        .catch(error => next(error));
+          .catch(error => next(error));
       }
     }).catch(error => next(error))
 });
@@ -149,7 +149,7 @@ const errorHandler = (error, req, res, next) => {
     console.error(error.message);
   }
   if (res.name === 'CastError') {
-    return res.status(400).send({ error: 'malformatted id'});
+    return res.status(400).send({ error: 'malformatted id' });
   } else if (error.name && error.name === 'ValidationError') {
     return res.status(400).json({ error: error.message });
   }
