@@ -135,9 +135,10 @@ app.post('/api/persons', (req, res, next) => {
           error: 'name must be unique'
         });
       } else {
+        // Menee catchiin jos validointi epäonnistuu.
         newPerson.save().then(savedPerson => {
           res.json(savedPerson);
-        });
+        }).catch(err );
       }
     }).catch(error => next(error))
 });
@@ -148,6 +149,8 @@ const errorHandler = (error, req, res, next) => {
   }
   if (res.name === 'CastError') {
     return res.status(400).send({ error: 'malformatted id'});
+  } else if (error.name === 'ValidationError') {
+    return res.status(400).json({ error: error.message });
   }
 
   // virheenkäsittely Expressin oletusarvoisen virheidenkäsittelijän hoidettavaksi.
